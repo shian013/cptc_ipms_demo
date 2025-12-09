@@ -1,0 +1,99 @@
+
+<!DOCTYPE html>
+<html lang='zh-Hant'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>側邊選單</title>
+<style>
+    body {
+        margin: 0;
+        background-color: #1e1e1e;
+        font-family: 'Microsoft JhengHei', sans-serif;
+        color: white;
+    }
+    .menu-container {
+        width: 100%;
+        height: 100vh;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+    .menu-button {
+        background-color: #2b2b2b;
+        color: white;
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        padding: 10px;
+        margin-bottom: 10px;
+        text-align: center;
+        cursor: pointer;
+        font-size: 14px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .menu-button:hover {
+        background-color: #3a3a3a;
+    }
+    .menu-button .code {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 4px;
+    }
+    .menu-button .label {
+        font-size: 14px;
+    }
+</style>
+</head>
+<body>
+<div class='menu-container'>
+    <div class='menu-button' onclick="">
+        <div class='code'>55400</div>
+        <div class='label'>主水壓充排水系統</div>
+    </div>
+    <div class='menu-button' onclick="">
+        <div class='code'>59420</div>
+        <div class='label'>潛艦救生救難裝置及求生系統</div>
+    </div>
+    <div class='menu-button' onclick="">
+        <div class='code'>43612</div>
+        <div class='label'>火災偵測警報系統</div>
+    </div>
+    <div class='menu-button' onclick="">
+        <div class='code'>56930</div>
+        <div class='label'>電力管理系統</div>
+    </div>
+    <div class='menu-button' onclick="parent.document.getElementById('I3').src='battery_monitor.html'">
+        <div class='code'>22340</div>
+        <div class='label'>電瓶監控系統</div>
+    </div>
+    <div class='menu-button' onclick="parent.document.getElementById('I3').src='shaft.html'">
+        <div class='code'>24320</div>
+        <div class='label'>推進軸系</div>
+    </div>
+    <div class='menu-button' onclick="">
+        <div class='code'>24232</div>
+        <div class='label'>排煙系統</div>
+    </div>
+    <div class='menu-button' onclick="">
+        <div class='code'>54100</div>
+        <div class='label'>燃油運轉及補償系統</div>
+    </div>
+    <div class='menu-button' onclick="">
+        <div class='code'>23510</div>
+        <div class='label'>主發電機</div>
+    </div>
+    <div class='menu-button' onclick="">
+        <div class='code'>23520</div>
+        <div class='label'>主馬達</div>
+    </div>
+    <div class='menu-button' onclick="">
+        <div class='code'>20200</div>
+        <div class='label'>主推進電力與控制系統</div>
+    </div>
+</div>
+</body>
+</html>

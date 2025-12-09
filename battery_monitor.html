@@ -1,0 +1,342 @@
+
+<!DOCTYPE html>
+<html lang='zh-TW'>
+<head>
+<meta charset='UTF-8'>
+<title>電瓶監控系統</title>
+
+<style>
+    body { margin: 0; font-family: 'Microsoft JhengHei', sans-serif; background-color: #f0f0f0; }
+    .outer-container { display: flex; flex-direction: column; position: relative; background-color: #2c2f38; color: white; font-weight: bold;}
+    .tab-bar { display: flex; align-items: flex-end; gap: 10px; border-bottom: 1px solid #ccc; background-color: #2c2f38; height: auto; padding: 5px; line-height: normal; margin-bottom: 0; padding-bottom: 0;}
+    .bar-tab { display: flex; align-items: center; background-color: #f0f0f0; color: #333; padding: 8px 12px; border-radius: 4px 4px 0 0; font-weight: bold; bottom: 0; }
+    .bar-tab .close-btn { width: 20px; height: 20px; border-radius: 50%; border: 1px solid #333; background-color: #333; color: #fff; font-size: 12px; cursor: pointer; margin-left: 8px; display: flex; justify-content: center; align-items: center; }
+    .bar-tab .close-btn:hover {
+        background-color: #333;
+        color: #fff;
+    }
+    .tabs {
+        display: flex; gap: 10px; margin: 10px 20px;
+    }
+    .tab {
+        padding: 8px 15px; background-color: #ddd; cursor: pointer; border-radius: 4px;
+    }
+    .tab.active { background-color: #150202; font-weight: bold; color:#fff }
+    .container { display: flex; flex-wrap: wrap; }
+    .info { min-width: 250px; padding-right: 5px; }
+    p.padding { margin: 0; padding: 0;}
+    .main-container {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+    }
+    .left-panel {
+        width: 35%;
+        padding: 15px;
+        box-sizing: border-box;
+        border-right: 1px solid #ccc;
+        overflow: auto
+    }
+    .right-panel {
+        width: 65%;
+        padding: 15px;
+        overflow: auto
+    }
+    .grid {
+        box-sizing: border-box;
+        display: grid;
+        grid-template-columns: repeat(15, 1fr);
+        gap: 2px;
+    }
+    .cell {
+        background-color: green; color: white; text-align: center; padding: 10px;
+        cursor: pointer; border-radius: 4px; font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+    .cell:hover { filter: brightness(85%); }
+    .cell.yellow { background-color: yellow; color: black; }
+    .cell.red { background-color: red; }
+    .rowid {
+        background-color: #ddd; color: rgb(19, 19, 19); text-align: center; padding: 10px;
+        cursor: none; border-radius: 4px; font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+</style>
+</head>
+<body>
+<div class="outer-container">
+    <div class="tab-bar">
+        <div class="bar-tab">
+            電瓶監控系統
+            <button class="close-btn" onclick="window.location.href='marine_main.html'">X</button>
+        </div>
+    </div>
+</div>
+<div class="main-container">
+    <div class='left-panel'>
+        <div class='container'>
+            <div class='tabs'>
+                <div class='tab active' onclick="window.location.href='battery_monitor.html'">前艙 Sys 1 監測</div>
+                <div class='tab' onclick="window.location.href='battery_monitor2.html'">前艙 Sys 2 監測</div>
+            </div>
+            <p class="padding">______________________________________________________________</p>
+            <div class='info'>
+                <table id="batInfo1" style="width:100%;">
+                    <tr>
+                        <td>總電瓶__________</td>
+                        <td>總電流__________A</td>
+                    </tr>
+                    <tr>
+                        <td>正常電瓶__________</td>
+                        <td>總能量__________wh__________Ah</td>
+                    </tr>
+                    <tr>
+                        <td>異常電瓶__________</td>
+                        <td>充電能量__________wh__________Ah</td>
+                    </tr>
+                    <tr>
+                        <td>故障電瓶__________</td>
+                        <td>放電能量__________wh__________Ah</td>
+                    </tr>
+                </table>
+                <p>剩餘充電能量__________wh__________Ah</p>
+                <table id="batInfo2">
+                    <tr>
+                        <td>總電壓__________V</td>
+                        <td>平均電瓶電壓__________kΩ</td>
+                    </tr>
+                    <tr>
+                        <td>絕緣值__________V</td>
+                        <td>平均電瓶溫度__________°C</td>
+                    </tr>
+                </table>
+                <p>平均整流密度__________kg/m³</p>
+                <p>剩餘充電時間__________Hour</p>
+                <p>剩餘航行時間__________Hour</p>
+                <table id="batInfo3" style="border: 1px solid black; border-collapse: collapse; width:100%;">
+                    <tr colspan="2">
+                        <td>含溫度補償之</td>
+                    </tr>
+                    <tr>
+                        <td>電瓶電壓__________</td>
+                        <td>產氣電壓__________</td>
+                    </tr>
+                </table>
+                <BR>
+                <table id="batInfo4" style="border: 1px solid black; border-collapse: collapse; width:100%;">
+                    <tr colspan=>
+                        <td>設定預期放電電流</td>
+                    </tr>
+                    <tr>
+                        <td>________________________A</td>
+                    </tr>
+                    <tr>
+                        <td>DOD_____________________Ah</td>
+                    </tr>
+                </table>
+            </div>
+        </div>  
+    </div> 
+    <div class='right-panel'>
+        <div class='container' style="padding-top: 60px;"></div>
+        <div class='grid'>
+            <div class='rowid '>A</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-A01&color=green&soc=99&soh=97&src=sys1'">1</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-A02&color=green&soc=99&soh=97&src=sys1'">2</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-A03&color=green&soc=99&soh=97&src=sys1'">3</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-A04&color=green&soc=99&soh=97&src=sys1'">4</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-A05&color=green&soc=99&soh=97&src=sys1'">5</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-A06&color=green&soc=99&soh=97&src=sys1'">6</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-A07&color=green&soc=99&soh=97&src=sys1'">7</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-A08&color=green&soc=99&soh=97&src=sys1'">8</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-A09&color=green&soc=99&soh=97&src=sys1'">9</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-A10&color=green&soc=99&soh=97&src=sys1'">10</div>
+            <div class='cell yellow' onclick="window.location.href='battery.html?text=Sys1-A11&color=yellow&soc=50&soh=50&src=sys1'">11</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-A12&color=green&soc=99&soh=97&src=sys1'">12</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-A13&color=green&soc=99&soh=97&src=sys1'">13</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-A14&color=green&soc=99&soh=97&src=sys1'">14</div>
+            <div class='rowid '>B</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-B01&color=green&soc=95&soh=90&src=sys1'">1</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-B02&color=green&soc=95&soh=90&src=sys1'">2</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-B03&color=green&soc=95&soh=90&src=sys1'">3</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-B04&color=green&soc=95&soh=90&src=sys1'">4</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-B05&color=green&soc=95&soh=90&src=sys1'">5</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-B06&color=green&soc=95&soh=90&src=sys1'">6</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-B07&color=green&soc=95&soh=90&src=sys1'">7</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-B08&color=green&soc=95&soh=90&src=sys1'">8</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-B09&color=green&soc=95&soh=90&src=sys1'">9</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-B10&color=green&soc=95&soh=90&src=sys1'">10</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-B11&color=green&soc=95&soh=90&src=sys1'">11</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-B12&color=green&soc=95&soh=90&src=sys1'">12</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-B13&color=green&soc=95&soh=90&src=sys1'">13</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-B14&color=green&soc=95&soh=90&src=sys1'">14</div>
+            <div class='rowid '>C</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-C01&color=green&soc=92&soh=88&src=sys1'">1</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-C02&color=green&soc=92&soh=88&src=sys1'">2</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-C03&color=green&soc=92&soh=88&src=sys1'">3</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-C04&color=green&soc=92&soh=88&src=sys1'">4</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-C05&color=green&soc=92&soh=88&src=sys1'">5</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-C06&color=green&soc=92&soh=88&src=sys1'">6</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-C07&color=green&soc=92&soh=88&src=sys1'">7</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-C08&color=green&soc=92&soh=88&src=sys1'">8</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-C09&color=green&soc=92&soh=88&src=sys1'">9</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-C10&color=green&soc=92&soh=88&src=sys1'">10</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-C11&color=green&soc=92&soh=88&src=sys1'">11</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-C12&color=green&soc=92&soh=88&src=sys1'">12</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-C13&color=green&soc=92&soh=88&src=sys1'">13</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-C14&color=green&soc=92&soh=88&src=sys1'">14</div>
+            <div class='rowid '>D</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-D01&color=green&soc=88&soh=90&src=sys1'">1</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-D02&color=green&soc=88&soh=90&src=sys1'">2</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-D03&color=green&soc=88&soh=90&src=sys1'">3</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-D04&color=green&soc=88&soh=90&src=sys1'">4</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-D05&color=green&soc=88&soh=90&src=sys1'">5</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-D06&color=green&soc=88&soh=90&src=sys1'">6</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-D07&color=green&soc=88&soh=90&src=sys1'">7</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-D08&color=green&soc=88&soh=90&src=sys1'">8</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-D09&color=green&soc=88&soh=90&src=sys1'">9</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-D10&color=green&soc=88&soh=90&src=sys1'">10</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-D11&color=green&soc=88&soh=90&src=sys1'">11</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-D12&color=green&soc=88&soh=90&src=sys1'">12</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-D13&color=green&soc=88&soh=90&src=sys1'">13</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-D14&color=green&soc=88&soh=90&src=sys1'">14</div>
+            <div class='rowid '>E</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-E01&color=green&soc=92&soh=93&src=sys1'">1</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-E02&color=green&soc=92&soh=93&src=sys1'">2</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-E03&color=green&soc=92&soh=93&src=sys1'">3</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-E04&color=green&soc=92&soh=93&src=sys1'">4</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-E05&color=green&soc=92&soh=93&src=sys1'">5</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-E06&color=green&soc=92&soh=93&src=sys1'">6</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-E07&color=green&soc=92&soh=93&src=sys1'">7</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-E08&color=green&soc=92&soh=93&src=sys1'">8</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-E09&color=green&soc=92&soh=93&src=sys1'">9</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-E10&color=green&soc=92&soh=93&src=sys1'">10</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-E11&color=green&soc=92&soh=93&src=sys1'">11</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-E12&color=green&soc=92&soh=93&src=sys1'">12</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-E13&color=green&soc=92&soh=93&src=sys1'">13</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-E14&color=green&soc=92&soh=93&src=sys1'">14</div>
+            <div class='rowid '>F</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-F01&color=green&soc=99&soh=93&src=sys1'">1</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-F02&color=green&soc=99&soh=93&src=sys1'">2</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-F03&color=green&soc=99&soh=93&src=sys1'">3</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-F04&color=green&soc=99&soh=93&src=sys1'">4</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-F05&color=green&soc=99&soh=93&src=sys1'">5</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-F06&color=green&soc=99&soh=93&src=sys1'">6</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-F07&color=green&soc=99&soh=93&src=sys1'">7</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-F08&color=green&soc=99&soh=93&src=sys1'">8</div>
+            <div class='cell yellow' onclick="window.location.href='battery.html?text=Sys1-F09&color=yellow&soc=44&soh=40&src=sys1'">9</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-F10&color=green&soc=99&soh=93&src=sys1'">10</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-F11&color=green&soc=99&soh=93&src=sys1'">11</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-F12&color=green&soc=99&soh=93&src=sys1'">12</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-F13&color=green&soc=99&soh=93&src=sys1'">13</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-F14&color=green&soc=99&soh=93&src=sys1'">14</div>
+            <div class='rowid '>G</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-G01&color=green&soc=97&soh=97&src=sys1'">1</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-G02&color=green&soc=97&soh=97&src=sys1'">2</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-G03&color=green&soc=97&soh=97&src=sys1'">3</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-G04&color=green&soc=97&soh=97&src=sys1'">4</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-G05&color=green&soc=97&soh=97&src=sys1'">5</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-G06&color=green&soc=97&soh=97&src=sys1'">6</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-G07&color=green&soc=97&soh=97&src=sys1'">7</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-G08&color=green&soc=97&soh=97&src=sys1'">8</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-G09&color=green&soc=97&soh=97&src=sys1'">9</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-G10&color=green&soc=97&soh=97&src=sys1'">10</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-G11&color=green&soc=97&soh=97&src=sys1'">11</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-G12&color=green&soc=97&soh=97&src=sys1'">12</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-G13&color=green&soc=97&soh=97&src=sys1'">13</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-G14&color=green&soc=97&soh=97&src=sys1'">14</div>
+            <div class='rowid '>H</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-H01&color=green&soc=91&soh=90&src=sys1'">1</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-H02&color=green&soc=91&soh=90&src=sys1'">2</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-H03&color=green&soc=91&soh=90&src=sys1'">3</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-H04&color=green&soc=91&soh=90&src=sys1'">4</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-H05&color=green&soc=91&soh=90&src=sys1'">5</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-H06&color=green&soc=91&soh=90&src=sys1'">6</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-H07&color=green&soc=91&soh=90&src=sys1'">7</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-H08&color=green&soc=91&soh=90&src=sys1'">8</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-H09&color=green&soc=91&soh=90&src=sys1'">9</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-H10&color=green&soc=91&soh=90&src=sys1'">10</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-H11&color=green&soc=91&soh=90&src=sys1'">11</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-H12&color=green&soc=91&soh=90&src=sys1'">12</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-H13&color=green&soc=91&soh=90&src=sys1'">13</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-H14&color=green&soc=91&soh=90&src=sys1'">14</div>
+            <div class='rowid '>I</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-I01&color=green&soc=86&soh=92&src=sys1'">1</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-I02&color=green&soc=86&soh=92&src=sys1'">2</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-I03&color=green&soc=86&soh=92&src=sys1'">3</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-I04&color=green&soc=86&soh=92&src=sys1'">4</div>
+            <div class='cell yellow' onclick="window.location.href='battery.html?text=Sys1-I05&color=yellow&soc=49&soh=44&src=sys1'">5</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-I06&color=green&soc=86&soh=92&src=sys1'">6</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-I07&color=green&soc=86&soh=92&src=sys1'">7</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-I08&color=green&soc=86&soh=92&src=sys1'">8</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-I09&color=green&soc=86&soh=92&src=sys1'">9</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-I10&color=green&soc=86&soh=92&src=sys1'">10</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-I11&color=green&soc=86&soh=92&src=sys1'">11</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-I12&color=green&soc=86&soh=92&src=sys1'">12</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-I13&color=green&soc=86&soh=92&src=sys1'">13</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-I14&color=green&soc=86&soh=92&src=sys1'">14</div>
+            <div class='rowid '>J</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-J01&color=green&soc=87&soh=87&src=sys1'">1</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-J02&color=green&soc=87&soh=87&src=sys1'">2</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-J03&color=green&soc=87&soh=87&src=sys1'">3</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-J04&color=green&soc=87&soh=87&src=sys1'">4</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-J05&color=green&soc=87&soh=87&src=sys1'">5</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-J06&color=green&soc=87&soh=87&src=sys1'">6</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-J07&color=green&soc=87&soh=87&src=sys1'">7</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-J08&color=green&soc=87&soh=87&src=sys1'">8</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-J09&color=green&soc=87&soh=87&src=sys1'">9</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-J10&color=green&soc=87&soh=87&src=sys1'">10</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-J11&color=green&soc=87&soh=87&src=sys1'">11</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-J12&color=green&soc=87&soh=87&src=sys1'">12</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-J13&color=green&soc=87&soh=87&src=sys1'">13</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-J14&color=green&soc=87&soh=87&src=sys1'">14</div>
+            <div class='rowid '>K</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-K01&color=green&soc=87&soh=87&src=sys1'">1</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-K02&color=green&soc=87&soh=87&src=sys1'">2</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-K03&color=green&soc=87&soh=87&src=sys1'">3</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-K04&color=green&soc=87&soh=87&src=sys1'">4</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-K05&color=green&soc=87&soh=87&src=sys1'">5</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-K06&color=green&soc=87&soh=87&src=sys1'">6</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-K07&color=green&soc=87&soh=87&src=sys1'">7</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-K08&color=green&soc=87&soh=87&src=sys1'">8</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-K09&color=green&soc=87&soh=87&src=sys1'">9</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-K10&color=green&soc=87&soh=87&src=sys1'">10</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-K11&color=green&soc=87&soh=87&src=sys1'">11</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-K12&color=green&soc=87&soh=87&src=sys1'">12</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-K13&color=green&soc=87&soh=87&src=sys1'">13</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-K14&color=green&soc=87&soh=87&src=sys1'">14</div>
+            <div class='rowid '>L</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-L01&color=green&soc=87&soh=87&src=sys1'">1</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-L02&color=green&soc=87&soh=87&src=sys1'">2</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-L03&color=green&soc=87&soh=87&src=sys1'">3</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-L04&color=green&soc=87&soh=87&src=sys1'">4</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-L05&color=green&soc=87&soh=87&src=sys1'">5</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-L06&color=green&soc=87&soh=87&src=sys1'">6</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-L07&color=green&soc=87&soh=87&src=sys1'">7</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-L08&color=green&soc=87&soh=87&src=sys1'">8</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-L09&color=green&soc=87&soh=87&src=sys1'">9</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-L10&color=green&soc=87&soh=87&src=sys1'">10</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-L11&color=green&soc=87&soh=87&src=sys1'">11</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-L12&color=green&soc=87&soh=87&src=sys1'">12</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-L13&color=green&soc=87&soh=87&src=sys1'">13</div>
+            <div class='cell red' onclick="window.location.href='battery.html?text=Sys1-L14&color=red&soc=15&soh=10&src=sys1'">14</div>
+            <div class='rowid '>M</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-M01&color=green&soc=87&soh=87&src=sys1'">1</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-M02&color=green&soc=87&soh=87&src=sys1'">2</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-M03&color=green&soc=87&soh=87&src=sys1'">3</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-M04&color=green&soc=87&soh=87&src=sys1'">4</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-M05&color=green&soc=87&soh=87&src=sys1'">5</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-M06&color=green&soc=87&soh=87&src=sys1'">6</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-M07&color=green&soc=87&soh=87&src=sys1'">7</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-M08&color=green&soc=87&soh=87&src=sys1'">8</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-M09&color=green&soc=87&soh=87&src=sys1'">9</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-M10&color=green&soc=87&soh=87&src=sys1'">10</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-M11&color=green&soc=87&soh=87&src=sys1'">11</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-M12&color=green&soc=87&soh=87&src=sys1'">12</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-M13&color=green&soc=87&soh=87&src=sys1'">13</div>
+            <div class='cell ' onclick="window.location.href='battery.html?text=Sys1-M14&color=green&soc=87&soh=87&src=sys1'">14</div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
