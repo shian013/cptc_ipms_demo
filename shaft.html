@@ -15,7 +15,14 @@
         background-color: #333;
         color: #fff;
     }
-    .main { position: relative; width: 100%; height: 100vh; background: url('shaft.png') no-repeat; background-size: contain; }
+    .image-container {
+        width: 100%;
+        overflow: auto; /* 允許水平捲動 */
+    }
+    .image-container img {
+        display: block;
+        max-width: none; /* 不縮放圖片，保持原始大小 */
+    }
 </style>
 </head>
 <body>
@@ -27,7 +34,6 @@
         </div>
     </div>
 </div>
-<div class='main'>
-</div>
+<div class='image-container'><img src="shaft.png" alt="推進軸系圖"></div>
 </body>
 </html>

@@ -3,10 +3,57 @@
 <head>
 <style>
     body { margin: 0; background-color: #2b2b2b; color: white; font-family: 'Microsoft JhengHei'; }
-    .topbar { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; }
-    .left { display: flex; gap: 120px; font-weight: bold; }
-    .center { font-size: 18px; font-weight: bold; }
-    .right { text-align: right; font-size: 14px; }
+    .topbar { display: flex; justify-content: flex-start; align-items: center; padding: 0; flex-wrap: nowrap; overflow: auto; }
+    .topbar::-webkit-scrollbar {
+        height: 6px; /* 捲動條高度 */
+    }
+    .topbar::-webkit-scrollbar-thumb {
+        background: #555;
+        border-radius: 3px;
+    }
+
+    .left { position: absolute; left: 1%; top: 20%; font-size: 16px; display: flex; font-weight: bold; flex-shrink: 0; }
+    .center { position: absolute; left: 50%; top: 20%; font-size: 16px; font-weight: bold; flex: 1; text-align: center; flex-shrink: 0; }
+    .right { position: absolute; left: 75%; top: 20%; text-align: right; font-size: 14px; flex-shrink: 0; }
+    /* 返回按鈕固定位置 */
+    .back {
+        position: absolute;
+        left: 32%;
+        top: 20%;
+        background-color: transparent;
+        color: white;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+    }
+    /* 手機版調整 */
+    @media (max-width: 600px) {
+        .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        }
+        .left {
+        font-size: 14px;
+        gap: 20px;
+        flex-wrap: wrap;
+        }
+        .center {
+        left: 42%;
+        font-size: 14px;
+        text-align: left;
+        }
+        .right {
+        font-size: 8px;
+        text-align: left;
+        }
+        .back {
+        left: 30%; /* 保持比例 */
+        font-size: 14px;
+        }
+    }
+
 </style>
 <script>
 function updateTime() {
@@ -24,8 +71,8 @@ window.onload = updateTime;
 <div class='topbar'>
     <div class='left'>
         <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;系統設定</span>
-        <span><a href="#" style='color:white; text-decoration:none;' onclick="parent.document.getElementById('I3').src='marine_main.html'; return false;">&lt;返回</a></span>
     </div>
+    <div class="back" onclick="parent.document.getElementById('I3').src='marine_main.html'">&lt;返回</div>
     <div class='center'>儀表板</div>
     <div class='right'>
         <div id='local-time'></div>
