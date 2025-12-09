@@ -41,7 +41,7 @@
 <body>
 <div class="outer-container">
     <div class="tab-bar">
-        <div class="bar-tab">
+        <div class="bar-tab" onclick="closeTab()">
             <p class="padding">電瓶監控系統</p>
             <button class="close-btn" onclick="window.location.href='marine_main.html'">X</button>
         </div>
@@ -122,6 +122,14 @@
 
     document.getElementById('battery-soc').textContent = `SOC=${soc}%`;
     document.getElementById('battery-soh').textContent = `SOH=${soh}%`;
+
+    function closeTab() {
+        if (fromPage == 'sys2') {
+            window.location.href='battery_monitor2.html'
+        } else {
+            window.location.href='battery_monitor.html'
+        }
+    }
 </script>
 </body>
 </html>
